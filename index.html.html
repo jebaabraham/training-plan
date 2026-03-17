@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your 40 LB Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f0e;
+    --surface: #141714;
+    --card: #1a1d1a;
+    --border: #2a2e2a;
+    --accent: #c8f542;
+    --accent2: #42f5a1;
+    --text: #e8ede8;
+    --muted: #6b756b;
+    --warm: #f5a542;
+    --red: #f54242;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ANIMATED BACKGROUND */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(200,245,66,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,245,66,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-glow {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,245,66,0.06) 0%, transparent 70%);
+    top: -200px; right: -200px;
+    pointer-events: none;
+    z-index: 0;
+    animation: glowPulse 8s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .header-left h1 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(52px, 10vw, 88px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-shadow: 0 0 60px rgba(200,245,66,0.3);
+  }
+
+  .header-left h1 span {
+    color: var(--text);
+  }
+
+  .header-left p {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .stat-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-align: center;
+    min-width: 90px;
+    transition: border-color 0.3s;
+  }
+
+  .stat-pill:hover { border-color: var(--accent); }
+
+  .stat-pill .val {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 32px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-pill .lbl {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 30px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .progress-header h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+
+  .progress-lbs {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .progress-lbs span {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .progress-track {
+    background: var(--border);
+    border-radius: 100px;
+    height: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 1s ease;
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .milestone-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .milestone {
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .milestone.reached { color: var(--accent); }
+
+  /* TABS */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-bottom: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 6px;
+  }
+
+  .tab {
+    padding: 10px 4px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    line-height: 1.3;
+    white-space: normal;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+  }
+
+  @media (max-width: 480px) {
+    .tabs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* PHASE CARDS */
+  .phase-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .phase-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+
+  .phase-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .phase-card.current { border-color: var(--accent); }
+
+  .phase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .phase-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 26px;
+    letter-spacing: 2px;
+  }
+
+  .phase-badge {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .phase-card.current .phase-badge {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+  }
+
+  .phase-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .phase-focus {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .focus-tag {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  .phase-goal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-radius: 10px;
+    font-size: 13px;
+  }
+
+  .phase-goal .icon { font-size: 18px; }
+  .phase-goal strong { color: var(--accent); }
+
+  /* WEEKLY SCHEDULE */
+  .week-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: 20px;
+    align-items: center;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .day-card:hover { border-color: var(--accent); }
+
+  .day-card.rest {
+    opacity: 0.6;
+  }
+
+  .day-card.rest:hover { border-color: var(--accent2); }
+
+  .day-label {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+
+  .day-sub {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .day-workout h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .day-workout p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .day-type {
+    text-align: right;
+  }
+
+  .type-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .type-strength { background: rgba(200,245,66,0.15); color: var(--accent); }
+  .type-cardio { background: rgba(245,165,66,0.15); color: var(--warm); }
+  .type-yoga { background: rgba(66,245,161,0.15); color: var(--accent2); }
+  .type-core { background: rgba(200,245,66,0.2); color: var(--accent); }
+  .type-rest { background: rgba(107,117,107,0.2); color: var(--muted); }
+  .type-active { background: rgba(66,245,161,0.1); color: var(--accent2); }
+
+  /* EXERCISE LIST */
+  .exercise-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .exercise-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: var(--bg);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    transition: border-color 0.2s;
+    gap: 10px;
+  }
+
+  .exercise-item:hover { border-color: var(--accent); }
+
+  .exercise-name { font-weight: 500; }
+  .exercise-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .exercise-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .exercise-sets { 
+    font-family: 'Bebas Neue', cursive;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .video-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,0,0,0.12);
+    border: 1px solid rgba(255,0,0,0.25);
+    color: #ff6b6b;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .video-btn:hover {
+    background: rgba(255,0,0,0.22);
+    border-color: rgba(255,0,0,0.5);
+    transform: scale(1.05);
+  }
+
+  .video-btn svg {
+    width: 12px; height: 12px;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* TIPS */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+
+  .tip-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+  }
+
+  .tip-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .tip-card h4 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .tip-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* TRACKER */
+  .tracker-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .tracker-section h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  .week-tracker {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .day-check {
+    flex: 1;
+    min-width: 50px;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    gap: 4px;
+    user-select: none;
+  }
+
+  .day-check .check-icon { font-size: 18px; }
+
+  .day-check:hover { border-color: var(--accent); color: var(--text); }
+
+  .day-check.done {
+    background: rgba(200,245,66,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .day-check.today {
+    border-color: var(--warm);
+    color: var(--warm);
+  }
+
+  .day-check.today.done {
+    background: rgba(245,165,66,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .streak-display {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .streak-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 40px;
+    color: var(--warm);
+    line-height: 1;
+  }
+
+  .streak-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .streak-text strong { color: var(--text); display: block; font-size: 15px; }
+
+  /* LOG INPUT */
+  .log-form {
+    display: grid;
+    gap: 14px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  .btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn:hover {
+    background: #d8ff55;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(200,245,66,0.2);
+  }
+
+  .btn:active { transform: translateY(0); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    background: var(--card);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: none;
+  }
+
+  /* MOTIVATION */
+  .quote-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 14px 14px 0;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quote-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px; right: 20px;
+    font-size: 120px;
+    font-family: 'Bebas Neue', cursive;
+    color: rgba(200,245,66,0.08);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .quote-text {
+    font-size: 18px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .quote-attr {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* NUTRITION */
+  .nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .nut-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+
+  .nut-card:hover { border-color: var(--accent); }
+
+  .nut-icon { font-size: 28px; margin-bottom: 8px; }
+  .nut-val {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .nut-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .nut-note { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 18px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* EXPAND toggle */
+  .day-detail {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .day-detail.open { display: block; animation: fadeIn 0.3s ease; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .day-card {
+      grid-template-columns: 70px 1fr;
+    }
+    .day-type { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .header-stats { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <h1>40 LB<br><span>Journey</span></h1>
+      <p>Your Personal Transformation Plan</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill">
+        <div class="val">30</div>
+        <div class="lbl">Min/Day</div>
+      </div>
+      <div class="stat-pill">
+        <div class="val">16</div>
+        <div class="lbl">Weeks</div>
+      </div>
+      <div class="stat-pill">
+        <div class="val">40</div>
+        <div class="lbl">LBS Goal</div>
+      </div>
+      <div class="stat-pill">
+        <div class="val">4</div>
+        <div class="lbl">Phases</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <h3>Overall Progress</h3>
+      <div class="progress-lbs">
+        <span id="lbsLost">0</span> / 40 lbs lost
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="milestone-row">
+      <div class="milestone reached" id="m0">Start</div>
+      <div class="milestone" id="m10">10 lbs</div>
+      <div class="milestone" id="m20">20 lbs</div>
+      <div class="milestone" id="m30">30 lbs</div>
+      <div class="milestone" id="m40">🏆 Goal!</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('plan')">Plan</button>
+    <button class="tab" onclick="showTab('weekly')">Schedule</button>
+    <button class="tab" onclick="showTab('tracker')">Tracker</button>
+    <button class="tab" onclick="showTab('nutrition')">Nutrition</button>
+    <button class="tab" onclick="showTab('motivation')">Motivation</button>
+  </div>
+
+  <!-- PLAN PANEL -->
+  <div class="panel active" id="panel-plan">
+    <div class="section-title">Training Phases</div>
+    <div class="phase-grid">
+
+      <div class="phase-card current">
+        <div class="phase-header">
+          <div>
+            <div class="phase-title">Phase 1: Reawaken</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:4px;">Weeks 1–4</div>
+          </div>
+          <div class="phase-badge">Start Here</div>
+        </div>
+        <p class="phase-desc">Your body needs to remember movement. This phase is about building the habit, not burning yourself out. Low impact, daily movement, rediscovering your body's potential. Expect muscle soreness — that's progress.</p>
+        <div class="phase-focus">
+          <span class="focus-tag">🧘 Yoga / Mobility</span>
+          <span class="focus-tag">🚶 Walking + Light Cardio</span>
+          <span class="focus-tag">💪 Bodyweight Strength</span>
+          <span class="focus-tag">🎯 Core Activation</span>
+        </div>
+        <div class="phase-goal">
+          <span class="icon">🎯</span>
+          <span>Target: <strong>6–8 lbs lost</strong> · Build daily workout habit · Restore mobility</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <div>
+            <div class="phase-title">Phase 2: Build Momentum</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:4px;">Weeks 5–8</div>
+          </div>
+          <div class="phase-badge">Weeks 5–8</div>
+        </div>
+        <p class="phase-desc">Introduce structured strength training and increase cardio intensity. Pilates enters the mix for deep core work targeting belly and waist fat. Workouts start to feel more challenging — this is where real change begins.</p>
+        <div class="phase-focus">
+          <span class="focus-tag">🏋️ Light Weights</span>
+          <span class="focus-tag">🏃 Intervals / Jogging</span>
+          <span class="focus-tag">🤸 Pilates Core</span>
+          <span class="focus-tag">💧 Increased Volume</span>
+        </div>
+        <div class="phase-goal">
+          <span class="icon">🎯</span>
+          <span>Target: <strong>8–10 lbs lost</strong> · Visible waist reduction · Improved stamina</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <div>
+            <div class="phase-title">Phase 3: Accelerate</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:4px;">Weeks 9–12</div>
+          </div>
+          <div class="phase-badge">Weeks 9–12</div>
+        </div>
+        <p class="phase-desc">Your body is ready for real intensity. Compound lifts, HIIT cardio, and advanced Pilates work together to accelerate fat burn. Core strength is now a foundation, not just a focus. Energy levels noticeably higher.</p>
+        <div class="phase-focus">
+          <span class="focus-tag">🔥 HIIT Cardio</span>
+          <span class="focus-tag">🏋️ Compound Lifting</span>
+          <span class="focus-tag">🤸 Advanced Pilates</span>
+          <span class="focus-tag">⚡ Circuit Training</span>
+        </div>
+        <div class="phase-goal">
+          <span class="icon">🎯</span>
+          <span>Target: <strong>12–14 lbs lost</strong> · Strong core · Leaner waistline</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <div>
+            <div class="phase-title">Phase 4: Transform</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:4px;">Weeks 13–16</div>
+          </div>
+          <div class="phase-badge">Weeks 13–16</div>
+        </div>
+        <p class="phase-desc">The final push. Max intensity, strategic recovery, and fine-tuned nutrition combine to hit your 40 lb goal. By now you've built the discipline — this is about finishing strong and setting up sustainable habits for life.</p>
+        <div class="phase-focus">
+          <span class="focus-tag">🏆 Peak Intensity</span>
+          <span class="focus-tag">💪 Muscle Definition</span>
+          <span class="focus-tag">🔥 Fat Shred Focus</span>
+          <span class="focus-tag">🧘 Recovery Yoga</span>
+        </div>
+        <div class="phase-goal">
+          <span class="icon">🏆</span>
+          <span>Target: <strong>40 lbs total</strong> · Strong, lean body · Lifetime habits</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WEEKLY SCHEDULE PANEL -->
+  <div class="panel" id="panel-weekly">
+    <div class="section-title">Phase 1 Schedule (Weeks 1–4)</div>
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 20px; margin-bottom:20px; font-size:13px; color:var(--muted); line-height:1.6;">
+      ⏱️ All workouts are <strong style="color:var(--text);">30 minutes</strong>. Click any day to see the full exercise list.
+    </div>
+    <div class="week-grid" id="weekGrid"></div>
+  </div>
+
+  <!-- TRACKER PANEL -->
+  <div class="panel" id="panel-tracker">
+    <div class="tracker-section">
+      <h3>This Week's Workouts</h3>
+      <div class="week-tracker" id="weekTracker"></div>
+      <div class="streak-display">
+        <div class="streak-num" id="streakNum">0</div>
+        <div class="streak-text">
+          <strong id="streakLabel">Day Streak</strong>
+          <span id="streakMessage">Mark today's workout done to start your streak! 🔥</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tracker-section">
+      <h3>Log Today's Workout</h3>
+      <div class="log-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="logDate">
+          </div>
+          <div class="form-group">
+            <label>Workout Type</label>
+            <select id="logType">
+              <option>Strength Training</option>
+              <option>Cardio / Running</option>
+              <option>Yoga</option>
+              <option>Pilates</option>
+              <option>Core Work</option>
+              <option>Active Recovery</option>
+              <option>Full Circuit</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Duration (minutes)</label>
+            <input type="number" id="logDuration" value="30" min="5" max="120">
+          </div>
+          <div class="form-group">
+            <label>Energy Level (1–10)</label>
+            <input type="number" id="logEnergy" value="7" min="1" max="10">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes (how did it feel?)</label>
+          <textarea id="logNotes" placeholder="e.g. Felt strong today, struggled with lunges but finished..."></textarea>
+        </div>
+        <div style="display:flex; gap:12px;">
+          <button class="btn" onclick="logWorkout()">✓ Log Workout</button>
+          <button class="btn btn-ghost" onclick="clearLog()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tracker-section">
+      <h3>Weight Log</h3>
+      <div class="form-row" style="margin-bottom:14px;">
+        <div class="form-group">
+          <label>Current Weight (lbs)</label>
+          <input type="number" id="weightInput" placeholder="e.g. 205" step="0.5">
+        </div>
+        <div class="form-group">
+          <label>Starting Weight (lbs)</label>
+          <input type="number" id="startWeightInput" placeholder="e.g. 215" step="0.5">
+        </div>
+      </div>
+      <button class="btn" onclick="updateWeight()">Update Progress</button>
+      <div id="weightFeedback" style="margin-top:14px; font-size:14px; color:var(--muted);"></div>
+    </div>
+  </div>
+
+  <!-- NUTRITION PANEL -->
+  <div class="panel" id="panel-nutrition">
+    <div class="quote-card" style="margin-bottom:20px;">
+      <div class="quote-text">You can't out-train a bad diet. But you also don't need perfection — just consistency with a few key principles.</div>
+    </div>
+
+    <div class="section-title">Daily Nutrition Targets</div>
+    <div class="nutrition-grid">
+      <div class="nut-card">
+        <div class="nut-icon">🔥</div>
+        <div class="nut-val">~500</div>
+        <div class="nut-label">Calorie Deficit</div>
+        <div class="nut-note">Below your maintenance level for ~1 lb/week loss</div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-icon">🥩</div>
+        <div class="nut-val">1g/lb</div>
+        <div class="nut-label">Protein Target</div>
+        <div class="nut-note">Preserves muscle while losing fat. Prioritize this.</div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-icon">💧</div>
+        <div class="nut-val">3L+</div>
+        <div class="nut-label">Water Daily</div>
+        <div class="nut-note">Boosts metabolism, reduces hunger, aids recovery</div>
+      </div>
+      <div class="nut-card">
+        <div class="nut-icon">🌙</div>
+        <div class="nut-val">7–9h</div>
+        <div class="nut-label">Sleep Goal</div>
+        <div class="nut-note">Poor sleep kills fat loss. Non-negotiable.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Belly Fat Targeting Foods</div>
+    <div class="tips-grid" style="margin-bottom:24px;">
+      <div class="tip-card">
+        <div class="tip-icon">✅</div>
+        <h4>Eat More Of</h4>
+        <p>Lean proteins (chicken, fish, eggs, legumes), leafy greens, berries, avocado, nuts, Greek yogurt, oats, sweet potato, olive oil.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🚫</div>
+        <h4>Minimize These</h4>
+        <p>Sugary drinks & juice, ultra-processed foods, refined carbs (white bread, pasta), alcohol, excessive sodium, fried foods.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">⏰</div>
+        <h4>Meal Timing</h4>
+        <p>Eat your largest meal before 3pm. Light dinner. Don't eat within 2 hours of bed. Consider a 12:12 eating window minimum.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🍽️</div>
+        <h4>Portion Control</h4>
+        <p>Use the plate method: ½ vegetables, ¼ protein, ¼ complex carbs. Eat slowly. Put the fork down between bites.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOTIVATION PANEL -->
+  <div class="panel" id="panel-motivation">
+    <div class="quote-card">
+      <div class="quote-text" id="dailyQuote">Loading your daily motivation...</div>
+      <div class="quote-attr">Today's Mindset</div>
+    </div>
+    <div style="margin-bottom:24px;">
+      <button class="btn btn-ghost" onclick="newQuote()" style="font-size:12px; padding:10px 20px;">↺ New Quote</button>
+    </div>
+
+    <div class="section-title">Staying Consistent</div>
+    <div class="tips-grid" style="margin-bottom:24px;">
+      <div class="tip-card">
+        <div class="tip-icon">📅</div>
+        <h4>Schedule It</h4>
+        <p>Treat workouts like appointments you can't cancel. Same time every day builds automatic habit — morning works best for most.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">📸</div>
+        <h4>Track Everything</h4>
+        <p>Take a weekly photo. Log your workouts. Seeing data proving your progress is incredibly motivating on hard days.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🔗</div>
+        <h4>The 2-Day Rule</h4>
+        <p>Never miss two days in a row. Miss one? Fine. Miss two? The habit breaks. This single rule prevents most relapses.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🏅</div>
+        <h4>Celebrate Wins</h4>
+        <p>Every 5 lbs lost, reward yourself (non-food). New workout gear, a massage, a day trip. Honor the work you're putting in.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">💬</div>
+        <h4>Tell Someone</h4>
+        <p>Accountability partners increase success rates by 65%. Tell a friend, join a community, post your progress — make it real.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">😤</div>
+        <h4>Bad Days Are Normal</h4>
+        <p>You will have off days. Miss a workout, eat badly. It doesn't matter. What matters is showing up the next day anyway.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Why This Plan Works For You</div>
+    <div class="phase-card" style="margin-bottom:0;">
+      <p style="font-size:14px; line-height:1.8; color:var(--muted);">
+        You already have the foundation — you've trained before with running, yoga, pilates and weights. That muscle memory doesn't disappear; it comes back faster than building from scratch. Your 18-month break means your body will respond dramatically to even moderate stimulus in Phase 1. <br><br>
+        The combination of <strong style="color:var(--text);">strength training + cardio + yoga + pilates</strong> is scientifically ideal for your goals: strength preserves muscle during fat loss, cardio burns calories, yoga reduces cortisol (which causes belly fat), and Pilates directly targets the deep core muscles that shrink waist circumference. <br><br>
+        At 30 minutes/day with consistency, you can realistically reach your goal in <strong style="color:var(--accent);">16–20 weeks</strong>. That's not a long time — but it requires showing up daily. The plan is set. The rest is up to you. 💪
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// DATA
+const weekdays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+const phase1Schedule = [
+  {
+    day: 'Monday',
+    short: 'Mon',
+    title: 'Strength + Core',
+    desc: 'Full-body bodyweight strength focused on belly and core activation',
+    type: 'strength',
+    typeName: 'Strength',
+    exercises: [
+      { name: 'Warm-up March in Place', sets: '3 min', detail: 'Raise knees high, swing arms', video: 'https://www.youtube.com/watch?v=ub9MnR4aHSs' },
+      { name: 'Bodyweight Squats', sets: '3×12', detail: 'Slow and controlled, 3 sec down', video: 'https://www.youtube.com/watch?v=aclHkVaku9U' },
+      { name: 'Modified Push-ups', sets: '3×8', detail: 'On knees OK, full range of motion', video: 'https://www.youtube.com/watch?v=jWxvty2KROs' },
+      { name: 'Glute Bridges', sets: '3×15', detail: 'Squeeze glutes at top, hold 1 sec', video: 'https://www.youtube.com/watch?v=wPM8icPu6H8' },
+      { name: 'Dead Bug Core', sets: '3×10', detail: 'Slow, controlled — feel the deep abs', video: 'https://www.youtube.com/watch?v=4XLEnwUr1d8' },
+      { name: 'Side Plank Hold', sets: '2×20s each', detail: 'Keep hips up, breathe steadily', video: 'https://www.youtube.com/watch?v=K6vQnNL_QkI' },
+      { name: 'Cooldown Stretch', sets: '5 min', detail: 'Hip flexors, hamstrings, shoulders', video: 'https://www.youtube.com/watch?v=L_xrDAtykMI' },
+    ]
+  },
+  {
+    day: 'Tuesday',
+    short: 'Tue',
+    title: 'Yoga + Mobility',
+    desc: 'Gentle yoga flow focused on hip openers, spine mobility and stress relief',
+    type: 'yoga',
+    typeName: 'Yoga',
+    exercises: [
+      { name: 'Sun Salutation A', sets: '3 rounds', detail: 'Slow flow, focus on breath', video: 'https://www.youtube.com/watch?v=73sjOu0g58M' },
+      { name: 'Warrior I + II', sets: '5 breaths each', detail: 'Both sides — open the hips', video: 'https://www.youtube.com/watch?v=Mn6RSIRCV3w' },
+      { name: 'Triangle Pose', sets: '5 breaths each side', detail: 'Stretches waist and sides', video: 'https://www.youtube.com/watch?v=YKNBsQRvTJs' },
+      { name: 'Cat-Cow Flow', sets: '2 min', detail: 'Spine mobilization', video: 'https://www.youtube.com/watch?v=kqnua4rHVVA' },
+      { name: 'Supine Twist', sets: '1 min each side', detail: 'Releases lower back and obliques', video: 'https://www.youtube.com/watch?v=OWKMkHGYFgY' },
+      { name: "Child's Pose", sets: '3 min', detail: 'Breathe deeply, let go of tension', video: 'https://www.youtube.com/watch?v=2MJGg-dUKh0' },
+    ]
+  },
+  {
+    day: 'Wednesday',
+    short: 'Wed',
+    title: 'Cardio Walk/Jog',
+    desc: 'Low-impact cardio to get the heart pumping and burn calories without overdoing it',
+    type: 'cardio',
+    typeName: 'Cardio',
+    exercises: [
+      { name: 'Warm-up Walk', sets: '5 min', detail: 'Easy pace, loosen up', video: 'https://www.youtube.com/watch?v=njeZ29umqVE' },
+      { name: 'Brisk Walk Intervals', sets: '20 min', detail: '2 min fast, 1 min easy — repeat', video: 'https://www.youtube.com/watch?v=MsR_KPsHJKA' },
+      { name: 'Stair Climbs (if available)', sets: '5 min', detail: 'Excellent for glutes and cardio', video: 'https://www.youtube.com/watch?v=twGaH9DRDHg' },
+      { name: 'Cool-down Walk', sets: '5 min', detail: 'Reduce pace gradually', video: 'https://www.youtube.com/watch?v=1RNRE_q_G5g' },
+    ]
+  },
+  {
+    day: 'Thursday',
+    short: 'Thu',
+    title: 'Pilates Core',
+    desc: 'Focused Pilates session targeting the deep core — transverse abdominis and obliques',
+    type: 'core',
+    typeName: 'Core',
+    exercises: [
+      { name: 'The Hundred (Modified)', sets: '3×30s', detail: 'Legs bent, pump arms — activate abs', video: 'https://www.youtube.com/watch?v=QM-bPFNEyGU' },
+      { name: 'Single Leg Stretch', sets: '3×10 each', detail: 'Slow and controlled', video: 'https://www.youtube.com/watch?v=dN0Bi3nk1Zo' },
+      { name: 'Crisscross / Bicycle', sets: '3×10 each', detail: 'Targets obliques, shrinks waist', video: 'https://www.youtube.com/watch?v=9FGilxCbdz8' },
+      { name: 'Leg Circles', sets: '10 each direction each leg', detail: 'Hip flexor + core stability', video: 'https://www.youtube.com/watch?v=l4kQd9eWclE' },
+      { name: 'Rolling Like a Ball', sets: '10 reps', detail: 'Massages spine, activates core', video: 'https://www.youtube.com/watch?v=3O1Q5HNRWjk' },
+      { name: 'Plank Hold', sets: '3×20s', detail: 'Build up gradually each week', video: 'https://www.youtube.com/watch?v=pSHjTRCQxIw' },
+      { name: 'Spine Stretch Forward', sets: '5 reps', detail: 'Decompress and stretch the back', video: 'https://www.youtube.com/watch?v=6Im5jlSezGs' },
+    ]
+  },
+  {
+    day: 'Friday',
+    short: 'Fri',
+    title: 'Strength + Cardio Mix',
+    desc: 'Circuit-style combining strength moves with cardio bursts for maximum calorie burn',
+    type: 'strength',
+    typeName: 'Strength',
+    exercises: [
+      { name: 'Jog in Place', sets: '3 min', detail: 'Warm-up cardio burst', video: 'https://www.youtube.com/watch?v=ub9MnR4aHSs' },
+      { name: 'Reverse Lunges', sets: '3×10 each leg', detail: 'Controlled, knee over toes', video: 'https://www.youtube.com/watch?v=xrPteyQLGAo' },
+      { name: 'Incline Push-ups', sets: '3×10', detail: 'Hands on chair or wall', video: 'https://www.youtube.com/watch?v=cfns5BuBVtQ' },
+      { name: 'High Knees', sets: '3×30s', detail: 'Cardio blast between strength sets', video: 'https://www.youtube.com/watch?v=tx5rgpGIyYs' },
+      { name: 'Dumbbell Rows (or resistance band)', sets: '3×12', detail: 'Back, biceps, posture', video: 'https://www.youtube.com/watch?v=roCP6wCXPqo' },
+      { name: 'Mountain Climbers', sets: '3×20s', detail: 'Core + cardio in one move', video: 'https://www.youtube.com/watch?v=nmwgirgXLYM' },
+      { name: 'Standing Side Crunches', sets: '3×15 each', detail: 'Waist reduction focus', video: 'https://www.youtube.com/watch?v=Z5hYXJBDXYI' },
+    ]
+  },
+  {
+    day: 'Saturday',
+    short: 'Sat',
+    title: 'Active Recovery',
+    desc: 'Light yoga, stretching, or a gentle walk. Keep moving without stressing the body',
+    type: 'active',
+    typeName: 'Active Rest',
+    exercises: [
+      { name: 'Option A: 30-min walk outside', sets: '', detail: 'Easy pace, enjoy the outdoors', video: 'https://www.youtube.com/watch?v=njeZ29umqVE' },
+      { name: 'Option B: Gentle yoga flow', sets: '30 min', detail: 'Focus on areas that feel tight', video: 'https://www.youtube.com/watch?v=v7AYKMP6rOE' },
+      { name: 'Option C: Full body stretch routine', sets: '30 min', detail: 'Low impact, keeps blood flowing', video: 'https://www.youtube.com/watch?v=L_xrDAtykMI' },
+    ]
+  },
+  {
+    day: 'Sunday',
+    short: 'Sun',
+    title: 'Full Rest Day',
+    desc: 'Rest is where muscle is built. Eat well, sleep 8 hours, prepare mentally for the week ahead',
+    type: 'rest',
+    typeName: 'Rest',
+    exercises: [
+      { name: '🛌 Sleep 8+ hours', sets: '', detail: 'Growth hormone peaks during deep sleep', video: null },
+      { name: '🥗 Meal prep for the week', sets: '', detail: 'Set yourself up for nutrition success', video: null },
+      { name: '🧘 5-min breathing / meditation', sets: '', detail: 'Lowers cortisol, reduces belly fat', video: 'https://www.youtube.com/watch?v=inpok4MKVLM' },
+      { name: '📋 Review next week\'s schedule', sets: '', detail: 'Planning = commitment', video: null },
+    ]
+  }
+];
+
+const quotes = [
+  "The body achieves what the mind believes. Your 18 months away doesn't erase who you were — it just makes the comeback story better.",
+  "Every workout you do is a vote for the person you want to become. You're not starting over. You're starting smarter.",
+  "Belly fat responds to one thing above all else: consistency over time. Not intensity. Not perfection. Consistency.",
+  "The hardest part is lacing up the shoes. Once you've done that, you've already won the battle.",
+  "You didn't gain the weight overnight. You won't lose it overnight. But you CAN lose it. And you WILL.",
+  "Strength doesn't come from doing the easy things. It comes from doing the hard things when you really don't want to.",
+  "Your only competition is who you were yesterday. Every rep, every step, every glass of water is a win.",
+  "The scale is not your enemy — inaction is. Movement is medicine. Start where you are, use what you have.",
+  "Yoga teaches you to breathe through discomfort. That lesson extends far beyond the mat.",
+  "Muscle memory is real. Your body remembers everything you've built before. It wants to come back — just give it the chance.",
+];
+
+// STATE
+let completedDays = JSON.parse(localStorage.getItem('completedDays') || '[]');
+let streak = parseInt(localStorage.getItem('streak') || '0');
+let startWeight = parseFloat(localStorage.getItem('startWeight') || '0');
+let currentWeight = parseFloat(localStorage.getItem('currentWeight') || '0');
+let quoteIndex = Math.floor(Math.random() * quotes.length);
+
+function save() {
+  localStorage.setItem('completedDays', JSON.stringify(completedDays));
+  localStorage.setItem('streak', streak);
+  localStorage.setItem('startWeight', startWeight);
+  localStorage.setItem('currentWeight', currentWeight);
+}
+
+// TABS
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// WEEKLY SCHEDULE
+function buildWeekGrid() {
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  phase1Schedule.forEach((day, i) => {
+    const card = document.createElement('div');
+    card.className = `day-card${day.type === 'rest' ? ' rest' : ''}`;
+    card.onclick = () => toggleDetail(i);
+    card.innerHTML = `
+      <div>
+        <div class="day-label">${day.day}</div>
+        <div class="day-sub">${day.type === 'rest' ? 'Recovery' : '30 Min'}</div>
+      </div>
+      <div class="day-workout">
+        <h4>${day.title}</h4>
+        <p>${day.desc}</p>
+        <div class="day-detail" id="detail-${i}">
+          <div class="exercise-list">
+            ${day.exercises.map(e => `
+              <div class="exercise-item">
+                <div style="flex:1; min-width:0;">
+                  <div class="exercise-name">${e.name}</div>
+                  ${e.detail ? `<div class="exercise-detail">${e.detail}</div>` : ''}
+                </div>
+                <div class="exercise-right">
+                  ${e.sets ? `<div class="exercise-sets">${e.sets}</div>` : ''}
+                  ${e.video ? `<a href="${e.video}" target="_blank" rel="noopener" class="video-btn" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Watch</a>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="day-type">
+        <span class="type-badge type-${day.type}">${day.typeName}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function toggleDetail(i) {
+  const detail = document.getElementById('detail-' + i);
+  detail.classList.toggle('open');
+}
+
+// TRACKER
+function buildWeekTracker() {
+  const today = new Date().getDay(); // 0=Sun
+  const todayIndex = today === 0 ? 6 : today - 1; // Convert to Mon=0
+  const container = document.getElementById('weekTracker');
+  container.innerHTML = '';
+  weekdays.forEach((d, i) => {
+    const isDone = completedDays.includes(i);
+    const isToday = i === todayIndex;
+    const btn = document.createElement('div');
+    btn.className = `day-check${isDone ? ' done' : ''}${isToday ? ' today' : ''}`;
+    btn.innerHTML = `
+      <span class="check-icon">${isDone ? '✓' : isToday ? '→' : '○'}</span>
+      <span>${d}</span>
+    `;
+    btn.onclick = () => toggleDay(i, btn);
+    container.appendChild(btn);
+  });
+  updateStreak();
+}
+
+function toggleDay(i, btn) {
+  const idx = completedDays.indexOf(i);
+  if (idx > -1) {
+    completedDays.splice(idx, 1);
+    btn.classList.remove('done');
+    btn.querySelector('.check-icon').textContent = '○';
+  } else {
+    completedDays.push(i);
+    btn.classList.add('done');
+    btn.querySelector('.check-icon').textContent = '✓';
+    showToast('Workout logged! 💪 Keep it up!');
+  }
+  save();
+  updateStreak();
+}
+
+function updateStreak() {
+  const s = completedDays.length;
+  document.getElementById('streakNum').textContent = s;
+  const msgs = ['Mark today\'s workout done to start your streak! 🔥', 'Great start! Keep showing up! 💪', 'Two days in! Habit forming! 🌱', 'Halfway through the week! Amazing! ⚡', 'Four days! You\'re on fire! 🔥', '5 days! Incredible consistency! 🏆', '6 days! Elite dedication! 🌟', 'Perfect week! Absolutely crushing it! 🏆🔥'];
+  document.getElementById('streakMessage').textContent = msgs[Math.min(s, msgs.length - 1)];
+  document.getElementById('streakLabel').textContent = `${s} Day${s !== 1 ? 's' : ''} This Week`;
+}
+
+// WEIGHT
+function updateWeight() {
+  const sw = parseFloat(document.getElementById('startWeightInput').value);
+  const cw = parseFloat(document.getElementById('weightInput').value);
+  if (isNaN(cw)) { showToast('Please enter your current weight'); return; }
+  if (!isNaN(sw)) startWeight = sw;
+  currentWeight = cw;
+  save();
+  updateProgress();
+  const lbs = startWeight > 0 ? Math.max(0, startWeight - currentWeight) : 0;
+  const feedback = document.getElementById('weightFeedback');
+  if (startWeight > 0) {
+    feedback.innerHTML = `<span style="color:var(--accent); font-weight:600;">You've lost ${lbs.toFixed(1)} lbs so far!</span> ${lbs >= 40 ? ' 🏆 GOAL REACHED!' : ` ${(40 - lbs).toFixed(1)} lbs to go.`}`;
+  } else {
+    feedback.innerHTML = `<span style="color:var(--muted);">Set your starting weight to track progress.</span>`;
+  }
+  showToast('Weight updated! Progress logged 📊');
+}
+
+function updateProgress() {
+  if (startWeight <= 0 || currentWeight <= 0) return;
+  const lost = Math.max(0, startWeight - currentWeight);
+  const pct = Math.min(100, (lost / 40) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('lbsLost').textContent = lost.toFixed(1);
+  [10, 20, 30].forEach(m => {
+    const el = document.getElementById('m' + m);
+    if (el) el.classList.toggle('reached', lost >= m);
+  });
+  if (lost >= 40) document.getElementById('m40').classList.add('reached');
+}
+
+// LOG
+function logWorkout() {
+  const type = document.getElementById('logType').value;
+  const dur = document.getElementById('logDuration').value;
+  showToast(`${type} (${dur} min) logged! You're doing great! 🏆`);
+  setTimeout(clearLog, 500);
+}
+
+function clearLog() {
+  document.getElementById('logNotes').value = '';
+  document.getElementById('logEnergy').value = '7';
+}
+
+// QUOTES
+function newQuote() {
+  quoteIndex = (quoteIndex + 1) % quotes.length;
+  document.getElementById('dailyQuote').textContent = quotes[quoteIndex];
+}
+
+// TOAST
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// INIT
+function init() {
+  const today = new Date();
+  document.getElementById('logDate').value = today.toISOString().split('T')[0];
+  document.getElementById('dailyQuote').textContent = quotes[quoteIndex];
+  buildWeekGrid();
+  buildWeekTracker();
+  if (startWeight > 0) document.getElementById('startWeightInput').value = startWeight;
+  if (currentWeight > 0) document.getElementById('weightInput').value = currentWeight;
+  updateProgress();
+}
+
+init();
+</script>
+</body>
+</html>
